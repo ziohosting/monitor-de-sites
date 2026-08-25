@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZIO Monitor de Sites | Painel de Observabilidade</title>
+    <!-- Google Fonts (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome para Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS Customizado -->
+    <link rel="stylesheet" href="assets/style.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fa-solid fa-server-pulse logo-icon"></i>
+                <h1>ZIO <span>Monitor de Sites</span></h1>
+            </div>
+            <div class="nav-actions">
+                <button id="toggle-sound-btn" class="btn btn-secondary muted" title="Ativar/Desativar Alerta Sonoro">
+                    <i class="fa-solid fa-volume-xmark sound-icon"></i> Alertas: <span id="sound-status">Mutados</span>
+                </button>
+                <button id="open-import-modal-btn" class="btn btn-secondary" onclick="document.getElementById('import-modal').classList.remove('hidden')">
+                    <i class="fa-solid fa-file-import"></i> Importar Lista
+                </button>
+                <button id="open-modal-btn" class="btn btn-primary" onclick="document.getElementById('monitor-modal').classList.remove('hidden')">
+                    <i class="fa-solid fa-plus"></i> Novo Monitor
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="dashboard-container">
+        <!-- Seção de Estatísticas -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon bg-blue">
+                    <i class="fa-solid fa-globe"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-label">Total de Sites</span>
+                    <span id="stat-total" class="stat-value">0</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon bg-green">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-label">Monitores Online</span>
+                    <span id="stat-up" class="stat-value text-green">0</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon bg-red">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-label">Monitores Offline</span>
+                    <span id="stat-down" class="stat-value text-red">0</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon bg-yellow">
+                    <i class="fa-solid fa-gauge-high"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-label">Latência Média (24h)</span>
+                    <span id="stat-latency" class="stat-value">0 ms</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Monitores (Grid de 2 Colunas) -->
+        <section class="dashboard-content">
+            <div class="monitors-section">
+                <div class="section-header">
+                    <h2><i class="fa-solid fa-list-check"></i> Sites Monitorados</h2>
+                    <div class="header-controls">
+                        <!-- Filtro de Categoria -->
+                        <div class="control-select-group">
+                            <i class="fa-solid fa-tags control-icon"></i>
+                            <select id="filter-category-select" class="control-select" title="Filtrar por Categoria">
+                                <option value="">Todas as Categorias</option>
+                            </select>
+                        </div>
+                        <!-- Ordenação -->
+                        <div class="control-select-group">
+                            <i class="fa-solid fa-arrow-down-up-rotate control-icon"></i>
+                            <select id="sort-by-select" class="control-select" title="Ordenar Lista">
+                                <option value="default">Ordem Padrão</option>
+                                <option value="latency-desc">Maior Latência Primeiro</option>
+                                <option value="latency-asc">Menor Latência Primeiro</option>
+                                <option value="name-asc">Nome (A-Z)</option>
+                                <option value="status-down">Offline Primeiro</option>
+                            </select>
+                        </div>
+                        <span id="update-indicator" class="update-indicator hidden">
+                            <i class="fa-solid fa-spinner fa-spin"></i>
+                        </span>
+                    </div>
+                </div>
+                <div id="monitors-list" class="monitors-list">
+                    <!-- Cards carregados dinamicamente via JS -->
+                    <div class="empty-state">
+                        <i class="fa-solid fa-circle-nodes empty-icon"></i>
+                        <p>Nenhum site monitorado ainda.</p>
+                        <button class="btn btn-primary" onclick="document.getElementById('open-modal-btn').click()">Adicionar Monitor</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal de Detalhes & Histórico de Latência do Domínio -->
+    <div id="details-modal" class="modal-overlay hidden">
+        <div class="modal modal-xl">
+            <div class="modal-header">
+                <div class="modal-header-title">
+                    <h3 id="modal-monitor-name"><i class="fa-solid fa-chart-line"></i> Nome do Monitor</h3>
+                    <a id="modal-monitor-url" href="#" target="_blank" class="monitor-link">https://site.com <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                </div>
+                <button id="close-details-modal-btn" class="close-btn" onclick="document.getElementById('details-modal').classList.add('hidden')">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <!-- Grid de Detalhes do Domínio -->
+                <div class="details-stats-grid">
+                    <div class="detail-card">
+                        <span class="detail-label">Status Atual</span>
+                        <span id="modal-status-badge" class="detail-value text-green"><i class="fa-solid fa-circle-check"></i> ONLINE</span>
+                    </div>
+                    <div class="detail-card">
+                        <span class="detail-label">Código HTTP</span>
+                        <span id="modal-status-code" class="detail-value">200 OK</span>
+                    </div>
+                    <div class="detail-card">
+                        <span class="detail-label">Última Latência</span>
+                        <span id="modal-latency-value" class="detail-value text-yellow">0 ms</span>
+                    </div>
+                    <div class="detail-card">
+                        <span class="detail-label">Intervalo de Check</span>
+                        <span id="modal-interval-value" class="detail-value">60s</span>
+                    </div>
+                    <div class="detail-card full-width-detail">
+                        <span class="detail-label">Categorias</span>
+                        <div id="modal-categories-value" class="modal-categories-tags">
+                            <span class="category-tag text-muted">Sem categorias</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gráfico de Latência -->
+                <div class="details-chart-wrapper">
+                    <div class="chart-header-row">
+                        <h4><i class="fa-solid fa-clock-rotate-left"></i> Histórico de Latência (Últimas Checagens)</h4>
+                        <span id="modal-last-check" class="last-check-text">Última checagem: --:--:--</span>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="latencyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" id="modal-check-now-btn" class="btn btn-secondary" onclick="if(window.activeMonitorId) window.app_checkNow(window.activeMonitorId)">
+                    <i class="fa-solid fa-arrows-rotate"></i> Verificar Agora
+                </button>
+                <button type="button" id="close-details-footer-btn" class="btn btn-secondary" onclick="document.getElementById('details-modal').classList.add('hidden')">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Cadastro de Novo Monitor -->
+    <div id="monitor-modal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-square-plus"></i> Novo Monitor de Sites</h3>
+                <button id="close-modal-btn" class="close-btn" onclick="document.getElementById('monitor-modal').classList.add('hidden')">&times;</button>
+            </div>
+            <form id="monitor-form" class="modal-form">
+                <div class="form-group">
+                    <label for="monitor-name">Nome Amigável do Site</label>
+                    <input type="text" id="monitor-name" placeholder="Ex: Meu Blog, Servidor de Produção" required autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="monitor-url">URL de Destino</label>
+                    <input type="url" id="monitor-url" placeholder="https://exemplo.com" required autocomplete="off">
+                    <small>Insira a URL completa contendo <code>http://</code> ou <code>https://</code>.</small>
+                </div>
+                <div class="form-group">
+                    <label for="monitor-interval">Intervalo de Verificação</label>
+                    <select id="monitor-interval" required>
+                        <option value="5">A cada 5 segundos (Alta Frequência)</option>
+                        <option value="10">A cada 10 segundos</option>
+                        <option value="30">A cada 30 segundos</option>
+                        <option value="60" selected>A cada 1 minuto</option>
+                        <option value="300">A cada 5 minutos</option>
+                        <option value="600">A cada 10 minutos</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="monitor-categories"><i class="fa-solid fa-tags"></i> Categorias (múltiplas separadas por vírgulas)</label>
+                    <input type="text" id="monitor-categories" placeholder="Ex: Produção, E-commerce, Clientes" autocomplete="off">
+                    <small>Exemplo: <code>Produção, E-commerce, ZIO</code></small>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" id="cancel-modal-btn" class="btn btn-secondary" onclick="document.getElementById('monitor-modal').classList.add('hidden')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Adicionar Monitor</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Importação de Lista de Monitores -->
+    <div id="import-modal" class="modal-overlay hidden">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-file-import"></i> Importar Lista de Sites</h3>
+                <button id="close-import-modal-btn" class="close-btn" onclick="document.getElementById('import-modal').classList.add('hidden')">&times;</button>
+            </div>
+            <form id="import-form" class="modal-form">
+                <!-- Seção de Drag & Drop do Arquivo TXT -->
+                <div class="form-group">
+                    <label>Carregar Arquivo .TXT</label>
+                    <div id="file-drop-area" class="file-drop-area">
+                        <input type="file" id="import-file-input" accept=".txt,text/plain" class="file-input-hidden">
+                        <i class="fa-solid fa-cloud-arrow-up file-drop-icon"></i>
+                        <div class="file-drop-text">
+                            <strong>Arraste e solte seu arquivo .txt aqui</strong>
+                            <span>ou <button type="button" class="btn-text-link" onclick="document.getElementById('import-file-input').click()">clique para selecionar do computador</button></span>
+                        </div>
+                        <small class="file-drop-hint">Formatos aceitos: .txt (uma URL por linha)</small>
+                    </div>
+                    <div id="file-status-badge" class="file-status-badge hidden">
+                        <i class="fa-solid fa-file-lines"></i>
+                        <span id="file-status-name">arquivo.txt</span>
+                        <span id="file-status-count" class="badge-count">0 URLs</span>
+                        <button type="button" id="clear-file-btn" class="btn-icon-sm" title="Remover arquivo">&times;</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="import-urls">Lista de URLs (Preview / Edição Manual)</label>
+                    <textarea id="import-urls" rows="6" placeholder="Exemplo:&#10;google.com&#10;https://github.com&#10;http://exemplo.com.br" required style="resize: vertical; background-color: var(--bg-dark); border: 1px solid var(--bg-border); border-radius: 6px; padding: 0.625rem; color: var(--text-main); font-size: 0.875rem; outline: none; transition: var(--transition); font-family: monospace;"></textarea>
+                    <small>Insira ou edite uma URL por linha. Protocolos (http:// ou https://) serão adicionados se ausentes. Nome do monitor = <strong>domínio do site</strong>. Intervalo = <strong>1 minuto</strong>.</small>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" id="cancel-import-modal-btn" class="btn btn-secondary" onclick="document.getElementById('import-modal').classList.add('hidden')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" id="import-submit-btn">
+                        <i class="fa-solid fa-file-import"></i> Importar Lista
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Edição de Monitor -->
+    <div id="edit-modal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-pen-to-square"></i> Editar Monitor de Site</h3>
+                <button id="close-edit-modal-btn" class="close-btn" onclick="document.getElementById('edit-modal').classList.add('hidden')">&times;</button>
+            </div>
+            <form id="edit-form" class="modal-form">
+                <input type="hidden" id="edit-monitor-id">
+                <div class="form-group">
+                    <label for="edit-monitor-name">Nome Amigável do Site</label>
+                    <input type="text" id="edit-monitor-name" required autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="edit-monitor-url">URL de Destino</label>
+                    <input type="url" id="edit-monitor-url" required autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="edit-monitor-interval">Intervalo de Verificação</label>
+                    <select id="edit-monitor-interval" required>
+                        <option value="5">A cada 5 segundos (Alta Frequência)</option>
+                        <option value="10">A cada 10 segundos</option>
+                        <option value="30">A cada 30 segundos</option>
+                        <option value="60">A cada 1 minuto</option>
+                        <option value="300">A cada 5 minutos</option>
+                        <option value="600">A cada 10 minutos</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="edit-monitor-categories"><i class="fa-solid fa-tags"></i> Categorias (múltiplas separadas por vírgulas)</label>
+                    <input type="text" id="edit-monitor-categories" placeholder="Ex: Produção, E-commerce, Clientes" autocomplete="off">
+                    <small>Edite as categorias do site separando-as por vírgula.</small>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" id="cancel-edit-modal-btn" class="btn btn-secondary" onclick="document.getElementById('edit-modal').classList.add('hidden')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 ZIO Monitor de Sites. Licença MIT. Desenvolvido para observabilidade em tempo real.</p>
+    </footer>
+
+    <!-- JavaScript Principal -->
+    <script src="assets/app.js"></script>
+</body>
+</html>

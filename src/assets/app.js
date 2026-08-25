@@ -56,8 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Navegação de Vistas (SPA In-Page)
     const viewDashboard = document.getElementById('view-dashboard');
     const viewDocs = document.getElementById('view-docs');
-    const navBtnDashboard = document.getElementById('nav-btn-dashboard');
-    const navBtnDocs = document.getElementById('nav-btn-docs');
+    const navTabMonitors = document.getElementById('nav-tab-monitors');
+    const navTabDocs = document.getElementById('nav-tab-docs');
     const navLogo = document.getElementById('nav-logo');
     const docsSearchInput = document.getElementById('docs-search-input');
 
@@ -95,23 +95,23 @@ document.addEventListener('DOMContentLoaded', () => {
         if (viewTarget === 'docs') {
             if (viewDashboard) viewDashboard.classList.add('hidden');
             if (viewDocs) viewDocs.classList.remove('hidden');
-            if (navBtnDashboard) navBtnDashboard.classList.remove('active');
-            if (navBtnDocs) navBtnDocs.classList.add('active');
+            if (navTabMonitors) navTabMonitors.classList.remove('active');
+            if (navTabDocs) navTabDocs.classList.add('active');
             if (docsSearchInput) docsSearchInput.focus();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
             if (viewDocs) viewDocs.classList.add('hidden');
             if (viewDashboard) viewDashboard.classList.remove('hidden');
-            if (navBtnDocs) navBtnDocs.classList.remove('active');
-            if (navBtnDashboard) navBtnDashboard.classList.add('active');
+            if (navTabDocs) navTabDocs.classList.remove('active');
+            if (navTabMonitors) navTabMonitors.classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     }
 
     function setupEventListeners() {
         // Navegação de Vistas da Página Principal
-        if (navBtnDashboard) navBtnDashboard.addEventListener('click', () => switchView('dashboard'));
-        if (navBtnDocs) navBtnDocs.addEventListener('click', () => switchView('docs'));
+        if (navTabMonitors) navTabMonitors.addEventListener('click', () => switchView('dashboard'));
+        if (navTabDocs) navTabDocs.addEventListener('click', () => switchView('docs'));
         if (navLogo) navLogo.addEventListener('click', () => switchView('dashboard'));
 
         // Modal Novo Monitor

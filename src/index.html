@@ -18,17 +18,22 @@
 <body>
     <header class="navbar">
         <div class="nav-container">
-            <div class="logo" id="nav-logo" style="cursor: pointer;" title="Voltar ao Painel Principal">
-                <i class="fa-solid fa-server-pulse logo-icon"></i>
-                <h1>ZIO <span>Monitor de Sites</span></h1>
+            <div class="logo-group">
+                <div class="logo" id="nav-logo" style="cursor: pointer;" title="Ir para Sites Monitorados">
+                    <i class="fa-solid fa-server-pulse logo-icon"></i>
+                    <h1>ZIO <span>Monitor de Sites</span></h1>
+                </div>
+                <!-- Abas de Navegação Principais da Aplicação -->
+                <nav class="nav-tabs">
+                    <button id="nav-tab-monitors" class="nav-tab active" title="Painel de Monitores">
+                        <i class="fa-solid fa-list-check"></i> Sites Monitorados
+                    </button>
+                    <button id="nav-tab-docs" class="nav-tab" title="Central de Documentação">
+                        <i class="fa-solid fa-book-bookmark"></i> Documentação
+                    </button>
+                </nav>
             </div>
             <div class="nav-actions">
-                <button id="nav-btn-dashboard" class="btn btn-secondary active" title="Ver Painel de Sites Monitorados">
-                    <i class="fa-solid fa-gauge-high"></i> Monitores
-                </button>
-                <button id="nav-btn-docs" class="btn btn-secondary" title="Ver Documentação do Sistema">
-                    <i class="fa-solid fa-book-bookmark"></i> Documentação
-                </button>
                 <button id="toggle-sound-btn" class="btn btn-secondary" title="Ativar/Desativar Alerta Sonoro">
                     <i class="fa-solid fa-volume-high sound-icon"></i> Alertas: <span id="sound-status">Ativos</span>
                 </button>

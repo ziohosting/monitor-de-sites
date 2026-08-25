@@ -926,11 +926,65 @@ body {
     margin-left: auto;
 }
 
-.btn-icon-sm {
-.btn-secondary.active {
-    background-color: var(--bg-border);
-    color: var(--color-primary);
-    border-color: rgba(16, 185, 129, 0.4);
+.logo-group {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+@media (max-width: 900px) {
+    .nav-container {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+    .logo-group {
+        justify-content: space-between;
+    }
+}
+
+.nav-tabs {
+    display: flex;
+    align-items: center;
+    background-color: var(--bg-dark);
+    padding: 0.25rem;
+    border-radius: 8px;
+    border: 1px solid var(--bg-border);
+}
+
+.nav-tab {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 0.5rem 1.125rem;
+    font-size: 0.84375rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+}
+
+.nav-tab:hover {
+    color: var(--text-main);
+}
+
+.nav-tab.active {
+    background-color: var(--color-primary);
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(16, 185, 129, 0.25);
+}
+
+/* Transição de Vistas (SPA) */
+.view-section {
+    animation: fadeIn 0.25s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* Página de Documentação Integrada */

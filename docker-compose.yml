@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: monitor_web
+    ports:
+      - "8181:80"
+    volumes:
+      - ./src:/var/www/html
+      - ./db:/var/www/db
+    restart: unless-stopped

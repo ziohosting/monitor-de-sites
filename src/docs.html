@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentação | ZIO Monitor de Sites</title>
+    <!-- Google Fonts (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome para Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS Customizado -->
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fa-solid fa-server-pulse logo-icon"></i>
+                <h1>ZIO <span>Monitor de Sites</span> - Documentação</h1>
+            </div>
+            <div class="nav-actions">
+                <a href="index.html" class="btn btn-primary">
+                    <i class="fa-solid fa-gauge-high"></i> Voltar ao Painel
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="dashboard-container">
+        <div class="doc-card" style="margin-bottom: 1.5rem;">
+            <div class="doc-card-header">
+                <h2 style="font-size: 1.25rem; font-weight: 700;"><i class="fa-solid fa-book-bookmark text-green"></i> Central de Ajuda & Documentação do Sistema</h2>
+                <span class="doc-badge badge-feature">Guia Oficial</span>
+            </div>
+            <p class="doc-card-text">
+                Encontre explicações detalhadas sobre todas as métricas, recursos de monitoramento, códigos de status HTTP, alertas e manuais de utilização do ZIO Monitor de Sites.
+            </p>
+
+            <!-- Barra de Busca em Tempo Real -->
+            <div class="docs-search-group" style="margin-top: 1rem;">
+                <i class="fa-solid fa-magnifying-glass docs-search-icon"></i>
+                <input type="text" id="standalone-search-input" class="docs-search-input" placeholder="Pesquisar por termo (ex: latência, verificar agora, códigos HTTP, silenciar alertas)..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="docs-layout" style="max-height: none; overflow: visible;">
+            <!-- Sidebar de Navegação Rápida -->
+            <nav class="docs-sidebar">
+                <span class="docs-sidebar-title">Índice da Documentação</span>
+                <a href="#doc-overview" class="docs-nav-link active"><i class="fa-solid fa-house"></i> Visão Geral</a>
+                <a href="#doc-concepts" class="docs-nav-link"><i class="fa-solid fa-bolt"></i> Glossário & Métricas</a>
+                <a href="#doc-features" class="docs-nav-link"><i class="fa-solid fa-cubes"></i> Recursos & Operações</a>
+                <a href="#doc-http" class="docs-nav-link"><i class="fa-solid fa-network-wired"></i> Códigos HTTP</a>
+                <a href="#doc-install" class="docs-nav-link"><i class="fa-solid fa-server"></i> Instalação & VPS</a>
+            </nav>
+
+            <!-- Conteúdo Principal -->
+            <div class="docs-content-body" id="standalone-docs-content">
+                <!-- Seção 1: Visão Geral -->
+                <section id="doc-overview" class="docs-section">
+                    <h3 class="docs-section-title"><i class="fa-solid fa-house"></i> Visão Geral do Sistema</h3>
+                    <div class="doc-card" data-keywords="visao geral sistema uptime observabilidade tempo real dashboard">
+                        <div class="doc-card-header">
+                            <h4 class="doc-card-title"><i class="fa-solid fa-shield-halved"></i> O que é o ZIO Monitor de Sites?</h4>
+                            <span class="doc-badge badge-feature">Visão Geral</span>
+                        </div>
+                        <p class="doc-card-text">
+                            O <strong>ZIO Monitor de Sites</strong> é uma plataforma avançada de observabilidade e monitoramento contínuo em tempo real. Ele acompanha a saúde, disponibilidade (uptime), código de status HTTP e latência (tempo de resposta) de websites, portas de servidores, APIs e microsserviços.
+                        </p>
+                        <div class="doc-highlight">
+                            <i class="fa-solid fa-circle-info"></i> O sistema opera via chamadas HTTP/cURL de alta velocidade e armazena registros históricos em banco de dados SQLite, permitindo análise contínua do desempenho e alerta imediato de indisponibilidade.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Seção 2: Glossário & Métricas -->
+                <section id="doc-concepts" class="docs-section">
+                    <h3 class="docs-section-title"><i class="fa-solid fa-bolt"></i> Glossário de Termos & Métricas</h3>
+                    
+                    <div class="doc-card" data-keywords="latencia milissegundos tempo de resposta ms velocidade ping conexao curl">
+                        <div class="doc-card-header">
+                            <h4 class="doc-card-title"><i class="fa-solid fa-gauge-high text-yellow"></i> Latência (ms)</h4>
+                            <span class="doc-badge badge-concept">Métrica</span>
+                        </div>
+                        <p class="doc-card-text">
+                            <strong>Latência</strong> (medida em milissegundos - <code>ms</code>) é o tempo exato que uma requisição HTTP leva para sair do servidor de monitoramento, alcançar o servidor do site e retornar os cabeçalhos de resposta completos (Round-Trip Time).
+                        </p>
+                        <p class="doc-card-text">
+                            • <strong>0 ms a 150 ms</strong>: Latência excelente. O site está muito rápido e responsivo.<br>
+                            • <strong>151 ms a 500 ms</strong>: Latência moderada/aceitável.<br>
+                            • <strong>> 500 ms (Latência Alta)</strong>: Alerta de lentidão. Pode indicar sobrecarga de CPU/Memória no servidor de destino, problemas no banco de dados do site ou gargalos de rede ISP.
+                        </p>
+                    </div>
+
+                    <div class="doc-card" data-keywords="status online up verde disponibilidade funcionamento ok 200">
+                        <div class="doc-card-header">
+                            <h4 class="doc-card-title"><i class="fa-solid fa-circle-check text-green"></i> Status ONLINE (UP)</h4>
+                            <span class="doc-badge badge-concept">Status</span>
+                        </div>
+                        <p class="doc-card-text">
+                            Indica que o site monitorado respondeu com <strong>sucesso</strong> dentro do tempo limite (timeout de 10s), retornando um código de resposta HTTP válido na faixa de sucesso (2xx, como HTTP 200 OK). O card exibe o indicador verde pulsante.
+                        </p>
+                    </div>
+
+                    <div class="doc-card" data-keywords="status offline down vermelho queda erro timeout inoperante falha 500 404">
+                        <div class="doc-card-header">
+                            <h4 class="doc-card-title"><i class="fa-solid fa-circle-exclamation text-red"></i> Status OFFLINE (DOWN)</h4>
+                            <span class="doc-badge badge-concept">Status</span>
+                        </div>
+                        <p class="doc-card-text">
+                            Indica que o site monitorado está <strong>indisponível ou apresentando falhas graves</strong>. Ocorre quando o servidor retorna erros HTTP (ex: 500, 502, 503, 404, 403), ultrapassa o tempo limite de conexão (timeout > 5s/10s), falha na resolução de DNS ou recusa a conexão TCP. O card exibe indicador vermelho pulsante e pode emitir alerta sonoro.
+                        </p>
+                    </div>
+
+                    <div class="doc-card" data-keywords="intervalo checagem frequencia segundos minutos verificacao automatica timer">
+                        <div class="doc-card-header">
+                            <h4 class="doc-card-title"><i class="fa-solid fa-clock"></i> Intervalo de Verificação (Check Interval)</h4>
+                            <span class="doc-badge badge-concept">Configuração</span>
+                        </div>
+                        <p class="doc-card-text">
+                            É a frequência com que o ZIO Monitor dispara testes automáticos de conectividade para cada site. Opções configuráveis: <strong>5s, 10s, 30s, 1 minuto, 5 minutos e 10 minutos</strong>. Monitores com menor intervalo detectam quedas mais rapidamente.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Seção 3: Recursos do Sistema -->
+                <section id="doc-features" class="docs-section">
+                    <h3 class="docs-section-title"><i class="fa-solid fa-cubes"></i> Recursos & Funcionalidades do Sistema</h3>
+
+                    <div class="doc-card" data-keywords="verificar agora check now manual teste imediato sob demanda checagem instantanea">
+                        <div class="doc-card-header">
+                            <h4 class="doc-card-title"><i class="fa-solid fa-arrows-rotate text-blue"></i> Verificar Agora (Check Now)</h4>
+                            <span class="doc-badge badge-feature">Recurso</span>
+                        </div>
+                        <p class="doc-card-text">
+                            <strong>Para que serve:</strong> Dispara uma checagem de status e latência <strong>imediatamente sob demanda</strong> para o site selecionado, ignorando o temporizador do intervalo automático.
+                        </p>
+                        <p class="doc-card-text">
+                            <strong>Como usar:</strong> Clique no botão de ícone de rotação <code>[ ↻ ]</code> no card do site ou dentro do modal de detalhes do domínio. O ícone girará durante a requisição e atualizará os dados na tela instantaneamente.
+                        </p>
+                    </div>
+
+                    <div class="doc-card" data-keywords="silenciar mutar alertas por dominio som sino notificacao som individual manutencao">
+                        <div class="doc-card-header">
+                            <h4 class="doc-card-title"><i class="fa-solid fa-bell-slash text-yellow"></i> Silenciamento Individual de Alertas (Mute por Domínio)</h4>
+                            <span class="doc-badge badge-feature">Recurso</span>
+                        </div>
+                        <p class="doc-card-text">
+                            <strong>Para que serve:</strong> Permite desativar notificações áudio/sonoras para um site específico (ex: um site que entrou em manutenção programada), sem desativar os alertas dos outros monitores.
+                        </p>
+                        <p class="doc-card-text">
+                            <strong>Como usar:</strong> Clique no ícone de sino <code>[ 🔔 / 🔕 ]</code> no card do monitor. Quando silenciado, um pequeno sino amarelo riscado será exibido junto ao nome do site e o sinal de alarme sonoro será ignorado caso o site caia.
+                        </p>
+                    </div>
+
+                    <div class="doc-card" data-keywords="alertas sonoros som audio bip bip web audio api topo aviso notificacao">
+                        <div class="doc-card-header">
+                            <h4 class="doc-card-title"><i class="fa-solid fa-volume-high text-green"></i> Alertas Sonoros Globais</h4>
+                            <span class="doc-badge badge-feature">Recurso</span>
+                        </div>
+                        <p class="doc-card-text">
+                            <strong>Como funciona:</strong> Emitem um bip sonoro duplo sintetizado via <strong>Web Audio API</strong> nativa do navegador (sem arquivos externos mp3) no instante exato em que qualquer monitor transiciona de ONLINE para OFFLINE. O botão no cabeçalho permite alternar entre <strong>Alertas: Ativos</strong> e <strong>Alertas: Mutados</strong>.
+                        </p>
+                    </div>
+
+                    <div class="doc-card" data-keywords="categorias tags filtro organizacao grupos producao ecommerce clientes">
+                        <div class="doc-card-header">
+                            <h4 class="doc-card-title"><i class="fa-solid fa-tags text-blue"></i> Categorização Múltipla & Filtros (Tags)</h4>
+                            <span class="doc-badge badge-feature">Recurso</span>
+                        </div>
+                        <p class="doc-card-text">
+                            <strong>Para que serve:</strong> Agrupa seus monitores por tags personalizadas (ex: <code>Produção, E-commerce, APIs, Clientes</code>). Permite associar múltiplas categorias por site separando-as por vírgula.
+                        </p>
+                        <p class="doc-card-text">
+                            <strong>Filtro:</strong> Use o menu suspenso de categorias no topo da lista para visualizar rapidamente apenas os monitores pertencentes àquela categoria.
+                        </p>
+                    </div>
+
+                    <div class="doc-card" data-keywords="ordenacao maior latencia menor latencia nome a-z offline primeiro ordem lista">
+                        <div class="doc-card-header">
+                            <h4 class="doc-card-title"><i class="fa-solid fa-arrow-down-up-rotate"></i> Ordenação Inteligente de Monitores</h4>
+                            <span class="doc-badge badge-feature">Recurso</span>
+                        </div>
+                        <p class="doc-card-text">
+                            Permite reordenar a lista de monitores em tempo real segundo múltiplos critérios:
+                        </p>
+                        <p class="doc-card-text">
+                            • <strong>Maior Latência Primeiro</strong>: Traz para o topo os sites mais lentos ou sob estresse de rede.<br>
+                            • <strong>Menor Latência Primeiro</strong>: Exibe primeiro os sites mais rápidos.<br>
+                            • <strong>Nome (A-Z)</strong>: Ordenação alfabética pelo nome amigável.<br>
+                            • <strong>Offline Primeiro</strong>: Destaca imediatamente no topo todos os sites que sofreram queda.
+                        </p>
+                    </div>
+
+                    <div class="doc-card" data-keywords="importacao lote txt drag drop arrastar soltar importar arquivo lista url">
+                        <div class="doc-card-header">
+                            <h4 class="doc-card-title"><i class="fa-solid fa-file-import"></i> Importação em Lote (.TXT)</h4>
+                            <span class="doc-badge badge-feature">Recurso</span>
+                        </div>
+                        <p class="doc-card-text">
+                            Permite cadastrar dezenas de sites de uma só vez. Suporta arrastar e soltar arquivos <code>.txt</code> (com uma URL por linha) ou colar diretamente na caixa de texto. O sistema limpa espaços, insere o protocolo <code>https://</code> automaticamente caso omitido e define frequência padrão de 1 minuto.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Seção 4: Códigos HTTP -->
+                <section id="doc-http" class="docs-section">
+                    <h3 class="docs-section-title"><i class="fa-solid fa-network-wired"></i> Tabela de Códigos de Status HTTP</h3>
+                    <div class="doc-card" data-keywords="codigos http status 200 301 403 404 500 502 503 gateway timeout erro">
+                        <table class="docs-table">
+                            <thead>
+                                <tr>
+                                    <th>Código HTTP</th>
+                                    <th>Significado</th>
+                                    <th>Estado no Monitor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>HTTP 200 OK</code></td>
+                                    <td>Requisição bem-sucedida. O servidor respondeu normalmente.</td>
+                                    <td><span class="text-green"><i class="fa-solid fa-circle-check"></i> ONLINE</span></td>
+                                </tr>
+                                <tr>
+                                    <td><code>HTTP 301/302</code></td>
+                                    <td>Redirecionamento permanente ou temporário de URL.</td>
+                                    <td><span class="text-green"><i class="fa-solid fa-circle-check"></i> ONLINE</span></td>
+                                </tr>
+                                <tr>
+                                    <td><code>HTTP 403 Forbidden</code></td>
+                                    <td>Acesso bloqueado por firewall, WAF ou permissões de pasta.</td>
+                                    <td><span class="text-red"><i class="fa-solid fa-circle-xmark"></i> OFFLINE</span></td>
+                                </tr>
+                                <tr>
+                                    <td><code>HTTP 404 Not Found</code></td>
+                                    <td>A página ou arquivo na URL informada não foi encontrado.</td>
+                                    <td><span class="text-red"><i class="fa-solid fa-circle-xmark"></i> OFFLINE</span></td>
+                                </tr>
+                                <tr>
+                                    <td><code>HTTP 500 Internal Error</code></td>
+                                    <td>Erro interno de código PHP, banco de dados ou servidor web.</td>
+                                    <td><span class="text-red"><i class="fa-solid fa-circle-xmark"></i> OFFLINE</span></td>
+                                </tr>
+                                <tr>
+                                    <td><code>HTTP 502/503 Service</code></td>
+                                    <td>Servidor web (Nginx/Apache) sobrecarregado ou PHP fora do ar.</td>
+                                    <td><span class="text-red"><i class="fa-solid fa-circle-xmark"></i> OFFLINE</span></td>
+                                </tr>
+                                <tr>
+                                    <td><code>Erro cURL (0)</code></td>
+                                    <td>Timeout (>10s), falha de DNS ou servidor inacessível na rede.</td>
+                                    <td><span class="text-red"><i class="fa-solid fa-circle-xmark"></i> OFFLINE</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Seção 5: Instalação & VPS -->
+                <section id="doc-install" class="docs-section">
+                    <h3 class="docs-section-title"><i class="fa-solid fa-server"></i> Instalação Local & Implantação em VPS</h3>
+                    <div class="doc-card" data-keywords="instalacao docker compose php vps nginx apache servidor localhost">
+                        <div class="doc-card-header">
+                            <h4 class="doc-card-title"><i class="fa-solid fa-terminal"></i> Execução em Localhost ou Servidor VPS</h4>
+                            <span class="doc-badge badge-feature">Deploy</span>
+                        </div>
+                        <p class="doc-card-text">
+                            • <strong>Docker Compose (Recomendado):</strong> Execute <code>docker-compose up -d --build</code> na raiz do projeto e acesse <code>http://localhost:8181</code>.<br>
+                            • <strong>Servidor PHP Local:</strong> Execute <code>php -S localhost:8181 -t src</code>.<br>
+                            • <strong>VPS em Produção:</strong> Pode ser hospedado usando Apache/PHP 8 com extensão <code>pdo_sqlite</code> e <code>curl</code> ativas ou via Docker com Proxy Reverso Nginx + SSL Certbot.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Estado Vazio para Busca Sem Resultados -->
+                <div id="standalone-empty-state" class="docs-empty-state hidden">
+                    <i class="fa-solid fa-circle-question"></i>
+                    <p>Nenhum tópico ou recurso encontrado para a pesquisa.</p>
+                    <small>Tente buscar por termos como: <strong>latência</strong>, <strong>verificar agora</strong>, <strong>alertas</strong> ou <strong>HTTP</strong>.</small>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 ZIO Monitor de Sites. Licença MIT. Desenvolvido para observabilidade em tempo real.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('standalone-search-input');
+            const docCards = document.querySelectorAll('#standalone-docs-content .doc-card');
+            const emptyState = document.getElementById('standalone-empty-state');
+
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    const query = e.target.value.toLowerCase().trim();
+                    let visibleCount = 0;
+
+                    docCards.forEach(card => {
+                        const keywords = (card.dataset.keywords || '').toLowerCase();
+                        const text = card.textContent.toLowerCase();
+                        
+                        if (!query || keywords.includes(query) || text.includes(query)) {
+                            card.style.display = '';
+                            visibleCount++;
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+
+                    if (emptyState) {
+                        if (visibleCount === 0) emptyState.classList.remove('hidden');
+                        else emptyState.classList.add('hidden');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

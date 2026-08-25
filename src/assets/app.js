@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let monitors = [];
     let activeMonitorId = null;
     let latencyChart = null;
-    let isSoundMuted = true;
+    let isSoundMuted = false; // Alertas sonoros ATIVOS por padrão
     let pollIntervals = {}; // Armazena timers por ID de monitor
 
     // --- Seletores de Elementos ---
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedCategoryFilter = '';
     let currentSortMode = 'default';
     
-    // Modal
+    // Modal Novo Monitor
     const modal = document.getElementById('monitor-modal');
     const openModalBtn = document.getElementById('open-modal-btn');
     const closeModalBtn = document.getElementById('close-modal-btn');
@@ -52,6 +52,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeImportModalBtn = document.getElementById('close-import-modal-btn');
     const cancelImportModalBtn = document.getElementById('cancel-import-modal-btn');
     const importForm = document.getElementById('import-form');
+
+    // Modal de Documentação & Busca
+    const docsModal = document.getElementById('docs-modal');
+    const openDocsBtn = document.getElementById('open-docs-btn');
+    const closeDocsModalBtn = document.getElementById('close-docs-modal-btn');
+    const docsSearchInput = document.getElementById('docs-search-input');
 
     // Som
     const toggleSoundBtn = document.getElementById('toggle-sound-btn');
@@ -109,6 +115,19 @@ document.addEventListener('DOMContentLoaded', () => {
             if (btn) btn.addEventListener('click', () => importModal.classList.add('hidden'));
         });
 
+        // Modal Documentação
+        if (openDocsBtn && docsModal) {
+            openDocsBtn.addEventListener('click', () => docsModal.classList.remove('hidden'));
+        }
+        if (closeDocsModalBtn && docsModal) {
+            closeDocsModalBtn.addEventListener('click', () => docsModal.classList.add('hidden'));
+        }
+
+        // Busca em Tempo Real na Documentação
+        if (docsSearchInput) {
+            docsSearchInput.addEventListener('input', handleDocsSearch);
+        }
+
         // Modal Detalhes do Domínio
         [closeDetailsModalBtn, closeDetailsFooterBtn].forEach(btn => {
             if (btn && detailsModal) {
@@ -121,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Fechar modais ao clicar fora (no fundo escuro / overlay)
-        [modal, importModal, detailsModal, editModal].forEach(m => {
+        [modal, importModal, detailsModal, editModal, docsModal].forEach(m => {
             if (m) {
                 m.addEventListener('click', (e) => {
                     if (e.target === m) {
@@ -164,6 +183,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentSortMode = e.target.value;
                 renderMonitors();
             });
+        }
+    }
+
+    function handleDocsSearch(e) {
+        const query = e.target.value.toLowerCase().trim();
+        const docCards = document.querySelectorAll('.docs-content-body .doc-card');
+        const emptyState = document.getElementById('docs-empty-state');
+        let visibleCount = 0;
+
+        docCards.forEach(card => {
+            const keywords = (card.dataset.keywords || '').toLowerCase();
+            const text = card.textContent.toLowerCase();
+            
+            if (!query || keywords.includes(query) || text.includes(query)) {
+                card.style.display = '';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        if (emptyState) {
+            if (visibleCount === 0) emptyState.classList.remove('hidden');
+            else emptyState.classList.add('hidden');
         }
     }
 

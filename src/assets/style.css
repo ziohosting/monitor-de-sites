@@ -927,14 +927,44 @@ body {
 }
 
 .btn-icon-sm {
-/* Modal de Documentação & Busca */
-.modal.modal-docs {
-    max-width: 1050px;
-    width: 95%;
-    max-height: 90vh;
+.btn-secondary.active {
+    background-color: var(--bg-border);
+    color: var(--color-primary);
+    border-color: rgba(16, 185, 129, 0.4);
+}
+
+/* Página de Documentação Integrada */
+.docs-view-container {
     display: flex;
     flex-direction: column;
+    gap: 1.5rem;
+}
+
+.docs-header-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--bg-border);
+    border-radius: var(--border-radius);
     padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.docs-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.docs-header-top h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
 }
 
 .docs-search-group {
@@ -942,7 +972,7 @@ body {
     display: flex;
     align-items: center;
     width: 100%;
-    margin-top: 0.75rem;
+    margin-top: 0.5rem;
 }
 
 .docs-search-icon {
@@ -974,10 +1004,7 @@ body {
     display: grid;
     grid-template-columns: 240px 1fr;
     gap: 1.5rem;
-    margin-top: 1rem;
-    max-height: 62vh;
-    overflow-y: auto;
-    padding-right: 0.5rem;
+    align-items: start;
 }
 
 @media (max-width: 768px) {

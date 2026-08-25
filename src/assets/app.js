@@ -53,10 +53,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelImportModalBtn = document.getElementById('cancel-import-modal-btn');
     const importForm = document.getElementById('import-form');
 
-    // Modal de Documentação & Busca
-    const docsModal = document.getElementById('docs-modal');
-    const openDocsBtn = document.getElementById('open-docs-btn');
-    const closeDocsModalBtn = document.getElementById('close-docs-modal-btn');
+    // Navegação de Vistas (SPA In-Page)
+    const viewDashboard = document.getElementById('view-dashboard');
+    const viewDocs = document.getElementById('view-docs');
+    const navBtnDashboard = document.getElementById('nav-btn-dashboard');
+    const navBtnDocs = document.getElementById('nav-btn-docs');
+    const navLogo = document.getElementById('nav-logo');
     const docsSearchInput = document.getElementById('docs-search-input');
 
     // Som
@@ -89,7 +91,29 @@ document.addEventListener('DOMContentLoaded', () => {
         setInterval(updateStats, 30000);
     }
 
+    function switchView(viewTarget) {
+        if (viewTarget === 'docs') {
+            if (viewDashboard) viewDashboard.classList.add('hidden');
+            if (viewDocs) viewDocs.classList.remove('hidden');
+            if (navBtnDashboard) navBtnDashboard.classList.remove('active');
+            if (navBtnDocs) navBtnDocs.classList.add('active');
+            if (docsSearchInput) docsSearchInput.focus();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+            if (viewDocs) viewDocs.classList.add('hidden');
+            if (viewDashboard) viewDashboard.classList.remove('hidden');
+            if (navBtnDocs) navBtnDocs.classList.remove('active');
+            if (navBtnDashboard) navBtnDashboard.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
+
     function setupEventListeners() {
+        // Navegação de Vistas da Página Principal
+        if (navBtnDashboard) navBtnDashboard.addEventListener('click', () => switchView('dashboard'));
+        if (navBtnDocs) navBtnDocs.addEventListener('click', () => switchView('docs'));
+        if (navLogo) navLogo.addEventListener('click', () => switchView('dashboard'));
+
         // Modal Novo Monitor
         if (openModalBtn) {
             openModalBtn.addEventListener('click', () => modal.classList.remove('hidden'));
@@ -115,14 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (btn) btn.addEventListener('click', () => importModal.classList.add('hidden'));
         });
 
-        // Modal Documentação
-        if (openDocsBtn && docsModal) {
-            openDocsBtn.addEventListener('click', () => docsModal.classList.remove('hidden'));
-        }
-        if (closeDocsModalBtn && docsModal) {
-            closeDocsModalBtn.addEventListener('click', () => docsModal.classList.add('hidden'));
-        }
-
         // Busca em Tempo Real na Documentação
         if (docsSearchInput) {
             docsSearchInput.addEventListener('input', handleDocsSearch);
@@ -140,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Fechar modais ao clicar fora (no fundo escuro / overlay)
-        [modal, importModal, detailsModal, editModal, docsModal].forEach(m => {
+        [modal, importModal, detailsModal, editModal].forEach(m => {
             if (m) {
                 m.addEventListener('click', (e) => {
                     if (e.target === m) {
@@ -954,4 +970,5 @@ document.addEventListener('DOMContentLoaded', () => {
     window.app_toggleMute = toggleMute;
     window.app_checkNow = checkNow;
     window.app_edit = openEditModal;
+    window.app_switchView = switchView;
 });

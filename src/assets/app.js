@@ -22,8 +22,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const updateIndicator = document.getElementById('update-indicator');
 
     // Filtros e Ordenação
+    const filterSearchInput = document.getElementById('filter-search-input');
     const filterCategorySelect = document.getElementById('filter-category-select');
     const sortBySelect = document.getElementById('sort-by-select');
+    let searchQuery = '';
     let selectedCategoryFilter = '';
     let currentSortMode = 'default';
     
@@ -186,7 +188,14 @@ document.addEventListener('DOMContentLoaded', () => {
             toggleSoundBtn.addEventListener('click', toggleSound);
         }
 
-        // Filtro por Categoria e Ordenação
+        // Busca por Nome / Domínio, Categoria e Ordenação
+        if (filterSearchInput) {
+            filterSearchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value.toLowerCase().trim();
+                renderMonitors();
+            });
+        }
+
         if (filterCategorySelect) {
             filterCategorySelect.addEventListener('change', (e) => {
                 selectedCategoryFilter = e.target.value;
@@ -629,8 +638,17 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Filtrar por categoria
+        // Filtrar por termo de busca (Nome ou URL/Domínio)
         let list = monitors.slice();
+        if (searchQuery) {
+            list = list.filter(m => {
+                const nameMatch = m.name && m.name.toLowerCase().includes(searchQuery);
+                const urlMatch = m.url && m.url.toLowerCase().includes(searchQuery);
+                return nameMatch || urlMatch;
+            });
+        }
+
+        // Filtrar por categoria
         if (selectedCategoryFilter) {
             list = list.filter(m => {
                 if (!m.categories) return false;
@@ -655,10 +673,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (list.length === 0) {
+            const emptyMsg = searchQuery 
+                ? `Nenhum site encontrado para "${searchQuery}".` 
+                : `Nenhum site encontrado para a categoria "${selectedCategoryFilter}".`;
             monitorsList.innerHTML = `
                 <div class="empty-state">
-                    <i class="fa-solid fa-filter-circle-xmark empty-icon"></i>
-                    <p>Nenhum site encontrado para a categoria "${selectedCategoryFilter}".</p>
+                    <i class="fa-solid fa-magnifying-glass-slash empty-icon"></i>
+                    <p>${emptyMsg}</p>
                 </div>`;
             return;
         }
